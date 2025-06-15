@@ -1,8 +1,13 @@
-import type { NextFunction, Request, Response } from "express";
+import type { Request, Response, NextFunction } from 'express';
 
-export function authMiddleware(req: Request, res:Response, next: NextFunction){
-  const authHeader = req.headers['authorization']
+export const authMiddleware = (req: Request, res: Response, next: NextFunction): void => {
+  const userId = req.headers['x-user-id'];
+  
+  if (!userId) {
+    res.status(401).json({ error: 'Unauthorized' });
+    return;
+  }
 
-  req.userId= "1";
-  next()
-}
+  req.userId = userId as string;
+  next();
+};
